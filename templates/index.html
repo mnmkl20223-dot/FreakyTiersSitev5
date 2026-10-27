@@ -1,0 +1,226 @@
+
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090711">
+<title>Freaky Tiers — Minecraft PvP</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+.mode-section {
+    margin: 0 0 24px;
+}
+.mode-heading {
+    color: #aaa3c5;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+.mode-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+.mode-button {
+    background: #14111f;
+    color: #f4f0ff;
+    border: 1px solid #302943;
+    border-radius: 12px;
+    padding: 15px 10px;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: .2s;
+}
+.mode-button:hover {
+    border-color: #8b5cf6;
+    transform: translateY(-2px);
+}
+.mode-button.active {
+    background: #25183d;
+    border-color: #a78bfa;
+    box-shadow: 0 0 18px #8b5cf622;
+}
+.mode-name {
+    display: block;
+    font-weight: 800;
+    font-size: 16px;
+}
+.mode-status {
+    display: block;
+    color: #a78bfa;
+    font-size: 11px;
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+.mode-button.coming .mode-status {
+    color: #9992aa;
+}
+.mode-notice {
+    display: none;
+    padding: 28px 15px;
+    text-align: center;
+    color: #aaa3c5;
+    border: 1px solid #302943;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+.mode-notice strong {
+    display: block;
+    color: #f4f0ff;
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+@media (max-width: 650px) {
+    .mode-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+</style>
+</head>
+<body>
+<header>
+    <a class="brand" href="#">
+        <b>F</b>
+        <span>FREAKY <i>TIERS</i><small>MINECRAFT PVP RANKINGS</small></span>
+    </a>
+    <div class="live">● LIVE RANKINGS</div>
+</header>
+
+<main>
+<section class="hero">
+    <p class="eyebrow">— OFFICIAL PLAYER LADDER</p>
+    <h1>PROVE YOUR <em>WORTH.</em></h1>
+    <p class="subtitle">
+        Тирлист игроков и команд Diamond SMP.
+        Данные синхронизируются с Discord.
+    </p>
+    <div class="stats">
+        <div><small>ИГРОКОВ</small><strong id="playerCount">—</strong></div>
+        <div><small>КОМАНД</small><strong id="teamCount">—</strong></div>
+        <div><small>ОБНОВЛЕНО</small><strong id="lastUpdated">—</strong></div>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="mode-section">
+        <div class="mode-heading">ВЫБЕРИ РЕЖИМ</div>
+        <div class="mode-grid" id="modeGrid">
+            <button class="mode-button active" data-mode="dsmp">
+                <span class="mode-name">DSMP</span>
+                <span class="mode-status">● ДОСТУПНО</span>
+            </button>
+            <button class="mode-button coming" data-mode="smp">
+                <span class="mode-name">SMP</span>
+                <span class="mode-status">СКОРО</span>
+            </button>
+            <button class="mode-button coming" data-mode="mace">
+                <span class="mode-name">MACE</span>
+                <span class="mode-status">СКОРО</span>
+            </button>
+            <button class="mode-button coming" data-mode="sword">
+                <span class="mode-name">SWORD</span>
+                <span class="mode-status">СКОРО</span>
+            </button>
+            <button class="mode-button coming" data-mode="crystal">
+                <span class="mode-name">CRYSTAL</span>
+                <span class="mode-status">СКОРО</span>
+            </button>
+            <button class="mode-button coming" data-mode="uhc">
+                <span class="mode-name">UHC</span>
+                <span class="mode-status">СКОРО</span>
+            </button>
+            <button class="mode-button coming" data-mode="axe">
+                <span class="mode-name">AXE</span>
+                <span class="mode-status">СКОРО</span>
+            </button>
+            <button class="mode-button coming" data-mode="cart">
+                <span class="mode-name">CART</span>
+                <span class="mode-status">СКОРО</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="mode-notice" id="modeNotice">
+        <strong id="comingTitle">СКОРО</strong>
+        Этот режим пока находится в разработке.
+    </div>
+
+    <div id="rankContent">
+        <div class="panelhead">
+            <div>
+                <small>DIAMOND SMP · PLAYER DATABASE</small>
+                <h2>Рейтинг команд и игроков</h2>
+            </div>
+            <input id="searchInput" type="search"
+                   placeholder="⌕ Поиск игрока или напарника...">
+        </div>
+
+        <nav id="filters">
+            <button class="active" data-tier="ALL">Все тиры</button>
+            <button data-tier="LT5">LT5</button>
+            <button data-tier="HT5">HT5</button>
+            <button data-tier="LT4">LT4</button>
+            <button data-tier="HT4">HT4</button>
+            <button data-tier="LT3">LT3</button>
+            <button data-tier="HT3">HT3</button>
+            <button data-tier="LT2">LT2</button>
+            <button data-tier="HT2">HT2</button>
+            <button data-tier="LT1">LT1</button>
+            <button data-tier="HT1">HT1</button>
+        </nav>
+
+        <div class="tablewrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ИГРОКИ / ПАРА</th>
+                        <th>ТИР</th>
+                        <th>ТИП</th>
+                        <th>СТАТУС</th>
+                    </tr>
+                </thead>
+                <tbody id="players">
+                    <tr><td colspan="4" class="empty">Загрузка рейтинга…</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="foot">
+            <span>● Автообновление каждые 30 секунд</span>
+            <span id="resultCount"></span>
+        </div>
+    </div>
+</section>
+
+<footer>
+    FREAKY TIERS
+    <span>COMMUNITY RANKINGS · MINECRAFT PVP</span>
+</footer>
+</main>
+
+<script>
+document.getElementById("modeGrid").addEventListener("click", function(e) {
+    const button = e.target.closest("button[data-mode]");
+    if (!button) return;
+
+    document.querySelectorAll(".mode-button").forEach(b => {
+        b.classList.toggle("active", b === button);
+    });
+
+    const isDsmp = button.dataset.mode === "dsmp";
+
+    document.getElementById("rankContent").style.display =
+        isDsmp ? "" : "none";
+
+    document.getElementById("modeNotice").style.display =
+        isDsmp ? "none" : "block";
+
+    document.getElementById("comingTitle").textContent =
+        button.querySelector(".mode-name").textContent + " — СКОРО";
+});
+</script>
+<script src="/static/app.js"></script>
+</body>
+</html>
